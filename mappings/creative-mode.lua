@@ -1,6 +1,6 @@
 --
 return function()
-    if not (game.active_mods['creative-mode'] or game.active_mods['creative-mode-fix']) or not settings.global["QuickItemSwap-support-creative-mode"].value then
+    if not (game.active_mods['creative-mode'] or game.active_mods['creative-mode-fix']) or not settings.global["quick-item-scroll-support-creative-mode"].value then
         return nil
     end
 
@@ -10,7 +10,7 @@ return function()
     else
         entity_prefix = "creative-mode-fix_"
     end
-    local split = settings.global["QuickItemSwap-creative-mode-split"].value
+    local split = settings.global["quick-item-scroll-creative-mode-split"].value
     local prefix = (split and "creative-mode_") or ""
 
     return { categories = {

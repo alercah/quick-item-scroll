@@ -1,11 +1,11 @@
 {
-    "name": "QuickItemSwap",
-    "version": "0.3.4",
-    "title": "Quick Item Swap",
-    "author": "Dewin",
-    "contact": "https://github.com/dewiniaid/QuickItemSwap",
-    "homepage": "https://github.com/dewiniaid/QuickItemSwap",
+    "name": "quick-item-scroll",
+    "version": "0.4.0",
+    "title": "Quick Item Scroll",
+    "author": "Alexis Hunt",
+    "contact": "https://github.com/alercah/quick-item-scroll",
+    "homepage": "https://github.com/alercah/quick-item-scroll",
     "factorio_version": "0.18",
     "dependencies": ["base >= 0.18"],
-    "description": "Adds keybindings to quickly swap the currently held item (e.g. a belt) to a related one (e.g. a splitter).  Supports a wide variety of items."
+    "description": "An updated fork of QuickItemSwap. Adds keybindings to quickly swap the currently held item (e.g. a belt) to a related one (e.g. a splitter).  Supports a wide variety of items."
 }

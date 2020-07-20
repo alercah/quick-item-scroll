@@ -21,8 +21,8 @@ mappings = {}
 
 
 CUSTOM_EVENTS = {
-    on_qis_mappings_reset = script.generate_event_name(),  -- Fired when something causes us to reset all mappings.
-    on_qis_mappings_patched = script.generate_event_name(),  -- Fired when something applies a patch (e.g. via remote.call)
+    on_quick_item_swap_mappings_reset = script.generate_event_name(),  -- Fired when something causes us to reset all mappings.
+    on_quick_item_swap_mappings_patched = script.generate_event_name(),  -- Fired when something applies a patch (e.g. via remote.call)
 }
 
 
@@ -59,16 +59,16 @@ local function rebuild_mappings(why)
         end
     end
     global.mappings = mappings
-    script.raise_event(CUSTOM_EVENTS.on_qis_mappings_reset, { why = why })
+    script.raise_event(CUSTOM_EVENTS.on_quick_item_swap_mappings_reset, { why = why })
 end
 
 
 local function add_commands()
     commands.add_command(
-            "qis-clear-blacklist",
-            "Resets your QuickItemSwap blacklist and whitelist to their defaults.", function()
+            "quick-item-scroll-clear-blacklist",
+            "Resets your Quick Item Scroll blacklist and whitelist to their defaults.", function()
                 global.playerdata[game.player.index].blacklist = {}
-                game.player.print({"qis-message.blacklist-cleared", game.player.name})
+                game.player.print({"quick-item-scroll-message.blacklist-cleared", game.player.name})
             end
     )
 end
@@ -112,7 +112,7 @@ end)
 script.on_load(on_load)
 script.on_configuration_changed(function(_)
     if global.debug then
-        game.print("[QuickItemSwap] Detected a configuration change.  Rebuilding item mappings.")
+        game.print("[Quick Item Scroll] Detected a configuration change.  Rebuilding item mappings.")
     end
     rebuild_mappings("configuration-changed")
 end
@@ -120,7 +120,7 @@ end
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     if global.debug then
-        game.print("[QuickItemSwap] Detected a mod settings change by " .. game.players[event.player_index].name .. ".  (Type: " .. event.setting_type .. ") Rebuilding item mappings.")
+        game.print("[Quick Item Scroll] Detected a mod settings change by " .. game.players[event.player_index].name .. ".  (Type: " .. event.setting_type .. ") Rebuilding item mappings.")
     end
     rebuild_mappings("settings-changed")
 end)
@@ -224,7 +224,7 @@ end
 -- Determine if an item is blacklisted.
 local function is_blacklisted(player, item, requires_tech)
     if requires_tech == nil then
-        requires_tech = player.mod_settings['QuickItemSwap-requires-tech'].value
+        requires_tech = player.mod_settings['quick-item-scroll-requires-tech'].value
     end
     local blacklist = global.playerdata[player.index].blacklist
     if blacklist[item] then
@@ -317,11 +317,11 @@ local function cycle_item(event, change_group, reverse)
     -- Are we allowed to cheat new items in?
     local can_cheat = (
             player.cheat_mode
-            and player.mod_settings["QuickItemSwap-support-cheat-mode"].value
+            and player.mod_settings["quick-item-scroll-support-cheat-mode"].value
     )
 
     -- Can we create item ghosts?
-    local can_ghost = player.mod_settings["QuickItemSwap-use-ghosts"].value
+    local can_ghost = player.mod_settings["quick-item-scroll-use-ghosts"].value
 
     local function find_or_cheat_item(entry)
         -- Search for the item in the inventory
@@ -348,7 +348,7 @@ local function cycle_item(event, change_group, reverse)
                     and (
                     not game.active_mods["creative-mode"]
                             or not string.find(entry.name, "^creative%-mode%_")
-                            or settings.get_player_settings(player)["QuickItemSwap-support-cheat-mode-with-creative"].value
+                            or settings.get_player_settings(player)["quick-item-scroll-support-cheat-mode-with-creative"].value
                 ))
         then
             target = entry
@@ -448,10 +448,10 @@ end
 
 
 -- Core functionality
-script.on_event("qis-item-next", function(event) return cycle_item(event, false, false) end)
-script.on_event("qis-item-prev", function(event) return cycle_item(event, false, true) end)
-script.on_event("qis-group-next", function(event) return cycle_item(event, true, false) end)
-script.on_event("qis-group-prev", function(event) return cycle_item(event, true, true) end)
+script.on_event("quick-item-scroll-item-next", function(event) return cycle_item(event, false, false) end)
+script.on_event("quick-item-scroll-item-prev", function(event) return cycle_item(event, false, true) end)
+script.on_event("quick-item-scroll-group-next", function(event) return cycle_item(event, true, false) end)
+script.on_event("quick-item-scroll-group-prev", function(event) return cycle_item(event, true, true) end)
 
 
 -- Housekeeping
@@ -463,7 +463,7 @@ end)
 
 
 -- Blacklist support.
-script.on_event("qis-toggle-blacklist", function(event)
+script.on_event("quick-item-scroll-toggle-blacklist", function(event)
     local player = game.players[event.player_index]
     local pdata = global.playerdata[player.index]
     local blacklist = pdata.blacklist
@@ -482,13 +482,13 @@ script.on_event("qis-toggle-blacklist", function(event)
 
     if blacklist[name] == nil then
         blacklist[name] = true
-        player.print({"qis-message.item-blacklisted", proto.localised_name})
+        player.print({"quick-item-scroll-message.item-blacklisted", proto.localised_name})
     elseif blacklist[name] == true then
         blacklist[name] = false
-        player.print({"qis-message.item-whitelisted", proto.localised_name})
+        player.print({"quick-item-scroll-message.item-whitelisted", proto.localised_name})
     else
         blacklist[name] = nil
-        player.print({"qis-message.item-defaulted", proto.localised_name})
+        player.print({"quick-item-scroll-message.item-defaulted", proto.localised_name})
     end
 end)
 
@@ -550,7 +550,7 @@ function api.apply_patch(patchinfo, source)
     end
 
     local function fail(message)
-        return error(table.concat(msg, "\n") .. "\n\n" .. message .. "\n\nThis is an error in the other mod, not in QuickItemSwap.\n\n" .. serpent.block(patchinfo))
+        return error(table.concat(msg, "\n") .. "\n\n" .. message .. "\n\nThis is an error in the other mod, not in Quick Item Scroll.\n\n" .. serpent.block(patchinfo))
     end
 
     -- Validate patch.
@@ -577,7 +577,7 @@ function api.apply_patch(patchinfo, source)
     end
 
     mappings:merge(patchinfo)
-    script.raise_event(CUSTOM_EVENTS.on_qis_mappings_patched, { patch = patchinfo, source = source  })
+    script.raise_event(CUSTOM_EVENTS.on_quick_item_swap_mappings_patched, { patch = patchinfo, source = source  })
 end
 
 function api.refresh(only_if_dirty)
@@ -590,11 +590,11 @@ end
 
 function api.dump_mappings(category, group, item)
     game.write_file(
-        "quickitemswap-mappings.txt",
+        "quick-item-scroll-mappings.txt",
         serpent.block(
             mappings:export(category, group, item)
         )
     )
 end
 
-remote.add_interface("QuickItemSwap", api)
+remote.add_interface("quick-item-scroll", api)

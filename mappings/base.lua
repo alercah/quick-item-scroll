@@ -6,7 +6,7 @@ local belt_item_orders = {
 }
 
 local function scan_prototypes(result)
-    -- Autogenerate QuickItemSwap groups.
+    -- Autogenerate quick-item-scroll groups.
 
     -- Currently, this only works for belts.
     local belt_groups = {}
@@ -47,7 +47,7 @@ local function scan_prototypes(result)
         --log(serpent.block(belt_groups))
         result.categories.belts = { groups = belt_groups }
     else
-        game.print("[QuickItemSwap] Failed to compute belt groups, falling back to defaults.  Belts from mods may not be supported.")
+        game.print("[quick-item-scroll] Failed to compute belt groups, falling back to defaults.  Belts from mods may not be supported.")
     end
 
     return result
