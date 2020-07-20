@@ -6,8 +6,8 @@ keybind will pick up a splitter. A wide variety of items and groups are supporte
 train vehicles, railway and rail signals, inserters, pipes, and modules.
 
 Item cycling can set your cursor to a ghost of items you don't currently have on you or, in cheat mode, to create items
-out of thin air as you scroll. This behaviour is toggleable. You can also whitelist or blacklist individual items from
-your rotation, on a per-player basis.
+out of thin air as you scroll. This behaviour is toggleable. You can also, on a per-player basis, set individual items
+to always be included or skipped in your scroll.
 
 Quick Item Scroll is a fork and replacement for [Quick Item Swap](https://mods.factorio.com/mod/QuickItemSwap), which
 has not been updated to the latest version of Factorio.

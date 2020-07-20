@@ -27,7 +27,7 @@ data:extend({
     },
     {
         type = "custom-input",
-        name = "quick-item-scroll-toggle-blacklist",
+        name = "quick-item-scroll-toggle-override",
         key_sequence = "ALT + Y",
         consuming = "game-only"
     },

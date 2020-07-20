@@ -37,7 +37,7 @@ local function initialize_globals()
                 item_history = {},
                 group_history = {},
                 type_history = {},
-                blacklist = {},
+                overrides = {},
             }
             t[k] = v
             return v
@@ -65,10 +65,10 @@ end
 
 local function add_commands()
     commands.add_command(
-            "quick-item-scroll-clear-blacklist",
-            "Resets your Quick Item Scroll blacklist and whitelist to their defaults.", function()
-                global.playerdata[game.player.index].blacklist = {}
-                game.player.print({"quick-item-scroll-message.blacklist-cleared", game.player.name})
+            "quick-item-scroll-clear-overrides",
+            "Clears your Quick Item Scroll overrides.", function()
+                global.playerdata[game.player.index].overrides = {}
+                game.player.print({"quick-item-scroll-message.overrides-cleared", game.player.name})
             end
     )
 end
@@ -221,15 +221,15 @@ local function cycle_bp(player, change_group, reverse)
 end
 
 
--- Determine if an item is blacklisted.
-local function is_blacklisted(player, item, requires_tech)
+-- Determine if an item is to be skipped.
+local function is_skipped(player, item, requires_tech)
     if requires_tech == nil then
         requires_tech = player.mod_settings['quick-item-scroll-requires-tech'].value
     end
-    local blacklist = global.playerdata[player.index].blacklist
-    if blacklist[item] then
+    local overrides = global.playerdata[player.index].overrides
+    if overrides[item] then
         return true
-    elseif blacklist[item] == false or not requires_tech then
+    elseif overrides[item] == false or not requires_tech then
         return false
     end
 
@@ -265,7 +265,7 @@ local function cycle_item(event, change_group, reverse)
     local player = game.players[event.player_index]
     local pdata = global.playerdata[player.index]
     local cursor = player.cursor_stack
-    local blacklist = pdata.blacklist
+    local overrides = pdata.overrides
 
     local source  -- Found mapping for source name.
 
@@ -344,7 +344,7 @@ local function cycle_item(event, change_group, reverse)
         end
 
         if (
-                can_cheat and not is_blacklisted(player, entry.name, false)
+                can_cheat and not is_skipped(player, entry.name, false)
                     and (
                     not game.active_mods["creative-mode"]
                             or not string.find(entry.name, "^creative%-mode%_")
@@ -355,7 +355,7 @@ local function cycle_item(event, change_group, reverse)
             return FindResult.CHEAT
         end
 
-        if can_ghost and not is_blacklisted(player, entry.name) then
+        if can_ghost and not is_skipped(player, entry.name) then
             target = entry
             return FindResult.GHOST
         end
@@ -462,11 +462,11 @@ script.on_event(defines.events.on_player_removed, function(event)
 end)
 
 
--- Blacklist support.
-script.on_event("quick-item-scroll-toggle-blacklist", function(event)
+-- Override support.
+script.on_event("quick-item-scroll-toggle-override", function(event)
     local player = game.players[event.player_index]
     local pdata = global.playerdata[player.index]
-    local blacklist = pdata.blacklist
+    local overrides = pdata.overrides
 
     local proto
 
@@ -480,14 +480,14 @@ script.on_event("quick-item-scroll-toggle-blacklist", function(event)
 
     local name = proto.name
 
-    if blacklist[name] == nil then
-        blacklist[name] = true
-        player.print({"quick-item-scroll-message.item-blacklisted", proto.localised_name})
-    elseif blacklist[name] == true then
-        blacklist[name] = false
-        player.print({"quick-item-scroll-message.item-whitelisted", proto.localised_name})
+    if overrides[name] == nil then
+        overrides[name] = true
+        player.print({"quick-item-scroll-message.item-skipped", proto.localised_name})
+    elseif overrides[name] == true then
+        overrides[name] = false
+        player.print({"quick-item-scroll-message.item-included", proto.localised_name})
     else
-        blacklist[name] = nil
+        overrides[name] = nil
         player.print({"quick-item-scroll-message.item-defaulted", proto.localised_name})
     end
 end)

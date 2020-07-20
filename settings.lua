@@ -56,7 +56,7 @@ if mods["creative-mode"] or mods["creative-mode-fix"] then
         },
         --{
         --    type = "string-setting",
-        --    name = "quick-item-scroll-initial-blacklist",
+        --    name = "quick-item-scroll-initial-override",
         --    default_value = "burner-inserter,burner-mining-drill",
         --    setting_type = "runtime-per-user",
         --    order = 220,

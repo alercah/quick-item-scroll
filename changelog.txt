@@ -5,6 +5,7 @@ Date: 07. 20. 2020
   Changes:
     - alercah forks the mod
     - Add support for inserters in Bob's Logistics
+    - Renamed "whitelist" and "blacklist" to "skip" and "include" overrides
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.4
