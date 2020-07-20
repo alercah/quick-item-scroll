@@ -1,5 +1,4 @@
 require "util"
---local Mappings = require("qis/mappings")
 local Lib = require("qis/lib")
 local Mapper = require("qis/mapper")
 
@@ -15,8 +14,7 @@ patches = {
     require("mappings/ElectricVehicles3"),
     require("mappings/FARL"),
     require("mappings/TrainSupplyManager"),
-    -- require("mappings/bobinserters"),
-    -- require("mappings/boblogistics")
+    require("mappings/boblogistics"),
 }
 
 mappings = {}
@@ -63,7 +61,6 @@ local function rebuild_mappings(why)
     global.mappings = mappings
     script.raise_event(CUSTOM_EVENTS.on_qis_mappings_reset, { why = why })
 end
-
 
 
 local function add_commands()
