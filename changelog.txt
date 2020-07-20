@@ -6,6 +6,7 @@ Date: 07. 20. 2020
     - alercah forks the mod
     - Add support for inserters in Bob's Logistics
     - Renamed "whitelist" and "blacklist" to "skip" and "include" overrides
+    - Skip overridden items even when some are held in hand
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.4

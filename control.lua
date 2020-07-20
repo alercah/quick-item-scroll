@@ -326,7 +326,7 @@ local function cycle_item(event, change_group, reverse)
     local function find_or_cheat_item(entry)
         -- Search for the item in the inventory
         stack = inv.find_item_stack(entry.name)
-        if stack then
+        if stack and not is_skipped(player, entry.name, false) then
             -- Well, that was easy.
             target = entry
             return FindResult.FOUND
@@ -516,6 +516,14 @@ function api.dump_quickbar(player)
         return false
     end
     api.dump_inventory(quickbar)
+end
+
+function api.dump_overrides(player)
+    player = player or game.players[1]
+    local overrides = global.playerdata[player.index].overrides
+    for item, val in pairs(overrides) do
+        player.print(item .. ": " .. tostring(val))
+    end
 end
 
 function api.debug(new)

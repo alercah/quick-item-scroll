@@ -165,7 +165,7 @@ unnoticeable) performance hit when cycling items.
 
 #### `remote.call("quick-item-scroll", "dump_inventory", inventory)`
 
-Developer function.  May disappear at any time.
+Intended for development use only and may change at any time.
 
 #### `remote.call("quick-item-scroll", "dump_quickbar", player)`
 
@@ -176,3 +176,6 @@ Intended for development use only and may change at any time.
 Writes the current mapping table to `script-output/quick-item-scroll-mappings.txt`. Intended for development use only and
 may change at any time.
 
+#### `remote.call("quick-item-scroll", "dump_overrides", player)`
+
+Intended for development use only and may change at any time.
